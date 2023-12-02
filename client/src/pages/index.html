@@ -6,6 +6,18 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Teste</h1>
+    <div>
+        <ul>
+            <a href="{{ url_for('users') }}">
+                <li>Usuários</li>
+            </a>
+            <a href="{{ url_for('products') }}">
+                <li>Produtos</li>
+            </a>
+            <a href="{{ url_for('categories') }}">
+                <li>Categorias</li>
+            </a>
+        </ul>
+    </div>
 </body>
 </html>
