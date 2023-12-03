@@ -11,7 +11,8 @@
             "driver": "MySQL",
             "name": "Workbench",
             "database": "n3",
-            "username": "root"
+            "username": "root",
+            "password": "MtMsH@+6XDZi"
         }
     ]
 }

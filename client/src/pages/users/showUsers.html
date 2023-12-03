@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-bt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users</title>
+</head>
+<body>
+    <div>
+        <ul>
+            <a href="/">
+                <li>Home</li>
+            </a>
+            <a href="{{ url_for('newUsers') }}">
+                <li>New User</li>
+            </a>
+        </ul>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>E-mail</th>
+                <th>Nome</th>
+                <th>Sobrenome</th>
+                <th>Ativo</th>
+            </tr>
+        </thead>
+        <tbody>
+           {% for user in users %}
+            <tr>
+                <td>{{ user[0] }}</td>
+                <td>{{ user[1] }}</td>
+                <td>{{ user[2] }}</td>
+                <td>{{ user[3] }}</td>
+                {% if user[4] == 1 %}
+                    <td>Ativo</td>
+                {% else %}
+                    <td>Inativo</td>
+                {% endif %}
+                <td>
+                    <a href="/update/{{user.id}}">Editar</a>
+                    <a href="/delete/{{user.id}}">Deletar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
