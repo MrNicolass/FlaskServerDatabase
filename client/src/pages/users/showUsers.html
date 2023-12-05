@@ -16,6 +16,11 @@
             </a>
         </ul>
     </div>
+    {%- for category, message in get_flashed_messages(with_categories = true) %}
+        <div class = "alert alert-danger">
+            {{ message }}
+        </div>
+    {%- endfor %}
     <table>
         <thead>
             <tr>
@@ -39,8 +44,8 @@
                     <td>Inativo</td>
                 {% endif %}
                 <td>
-                    <a href="/update/{{user.id}}">Editar</a>
-                    <a href="/delete/{{user.id}}">Deletar</a>
+                    <a href="/updateUser/{{user[0]}}">Editar</a>
+                    <a href="/deleteUser/{{user[0]}}">Deletar</a>
                 </td>
             </tr>
             {% endfor %}

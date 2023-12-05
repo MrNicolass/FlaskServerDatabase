@@ -23,7 +23,7 @@ def showUsers():
 def newUsers():
     if request.method == 'POST':
         if not request.form['email'] or not request.form['nome'] or not request.form['sobrenome'] or not request.form['ativo']:
-            flash("Preencha todos os campos", "Erro")
+            flash("Preencha todos os campos!", "Erro")
         else:
             email = request.form['email']
             nome = request.form['nome']
@@ -31,6 +31,28 @@ def newUsers():
             ativo = int(request.form['ativo'])
             dbc.insert("usuarios", email, nome, sobrenome, ativo)
     return render_template("users/newUsers.html")
+
+@app.route("/updateUser/<int:id>", methods=["GET", "POST"])
+def updateUser(id):
+    if request.method == 'POST':
+        if not request.form['email'] or not request.form['nome'] or not request.form['sobrenome'] or not request.form['ativo']:
+            flash("Preencha todos os campos!", "Erro")
+        else:
+            email = request.form['email']
+            nome = request.form['nome']
+            sobrenome = request.form['sobrenome']
+            ativo = int(request.form['ativo'])
+            flash(dbc.update("usuarios", id, email, nome, sobrenome, ativo))
+            #Volta para página principal
+            return redirect(url_for("showUsers"))
+    else:
+        return render_template("users/updateUsers.html", user=dbc.upSelect(id))
+    return render_template("users/updateUsers.html")
+
+@app.route("/deleteUser/<int:id>", methods=["GET", "POST"])
+def deleteUser(id):
+    dbc.delete("usuarios", id)
+    return redirect(url_for("showUsers"))
 
 @app.route("/products")
 def products():

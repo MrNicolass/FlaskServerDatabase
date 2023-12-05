@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New User</title>
+</head>
+<body>
+    <div>
+        <a href="/">
+            <h1>Home</h1>
+        </a>
+    </div>
+    <div>
+        {% for data in user %}
+            <form action="/updateUser/{{ data[0] }}" method="post">
+                <label for="email">E-mail</label><br>
+                <input type="text" name="email" placeholder="E-mail" value="{{ data[1] }}"/><br>
+                <label for="nome">Nome</label><br>
+                <input type="text" name="nome" placeholder="Nome" value="{{ data[2] }}"/><br>
+                <label for="sobrenome">Sobrenome</label><br>
+                <input type="text" name="sobrenome" placeholder="Nome" value="{{ data[3] }}"/><br>
+                <label for="ativo">Ativo</label>
+                {% if data[4] == 1 %}
+                <input type="radio" name="ativo" value="1" checked/>
+                <label for="inativo">Inativo</label>
+                <input type="radio" name="ativo" value="0"/><br>
+                {% else %}
+                <input type="radio" name="ativo" value="1"/>
+                <label for="inativo">Inativo</label>
+                <input type="radio" name="ativo" value="0" checked/><br>
+                {% endif %}
+                <input type="submit" value="Alterar"/>
+            </form>
+        {% endfor %}
+    </div>
+</body>
+</html>
