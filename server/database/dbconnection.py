@@ -212,6 +212,24 @@ def select(table):
             if connection().is_connected():
                 cnx.close()
 
+    elif(table == "status_produtos"):
+        cnx = connection()
+
+        try:
+            with cnx.cursor() as cursor:
+                cursor.execute("select * from status_produtos")
+                result = cursor.fetchall()
+            
+                return result
+
+        except mysql.connector.Error as error:
+            flash(f"Falha ao consultar dados! Erro: {error}", "Erro")
+
+        #Após a função ser executada, encerra a conexão com o banco
+        finally:
+            if connection().is_connected():
+                cnx.close()
+
 def update(table, id, *args):   
     if table == "usuarios":
         cnx = connection()
@@ -385,6 +403,25 @@ def productListPerTag(id):
 
     except mysql.connector.Error as error:
         flash(f"Falha ao consultar dados! Erro: {error}", "Erro")
+
+    #Após a função ser executada, encerra a conexão com o banco
+    finally:
+        if connection().is_connected():
+            cnx.close() 
+
+def selectURL(table):
+    cnx = connection()
+
+    try:
+        with cnx.cursor() as cursor:
+           # cursor.execute(f"SELECT p.cod_barras, p.descricao AS 'Produto', t.nome AS 'Tag', p.preco_normal AS 'Preco' FROM produtos AS p LEFT JOIN produtos_tags AS pt ON p.id = pt.id_produto LEFT JOIN tags AS t ON pt.id_tag = t.id")
+            cursor.execute(f"SELECT * FROM {table}")
+            result = cursor.fetchall()
+        
+            return result
+
+    except mysql.connector.Error as error:
+        return f"Falha ao consultar dados! Erro: {error}"
 
     #Após a função ser executada, encerra a conexão com o banco
     finally:

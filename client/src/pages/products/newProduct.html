@@ -23,7 +23,11 @@
             <label for="descricao">Descrição</label><br>
             <input type="text" name="descricao" placeholder="Descrição"/><br>
             <label for="status">Situação</label><br>
-            <input type="number" name="status" placeholder="Situação"/><br>
+            <select name="status">
+                {% for stat in status %}
+                    <option name="status" value="{{ stat[0] }}" selected="{{ stat[1] }}">{{ stat[1] }}</option>
+                {% endfor %}
+            </select><br>
             <label for="preco">Preço</label><br>
             <input type="number" name="preco" placeholder="Preço"/><br>
             <label for="precoD">Preço com Desconto</label><br>

@@ -1,1 +1,3 @@
-delete from categorias where id = 3
+select * from produtos_tags
+select * from status_produtos
+insert into status_produtos (nome) values ("Em produção")

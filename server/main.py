@@ -81,7 +81,7 @@ def newProduct():
             precoD = float(request.form['precoD'])
             quantidade = int(request.form['quantidade'])
             dbc.insert("produtos", cod_barras, descricao, status, preco, precoD, quantidade)
-    return render_template("products/newProduct.html")
+    return render_template("products/newProduct.html", status=dbc.select("status_produtos"))
 
 @app.route("/updateProduct/<int:id>", methods=['GET', 'POST'])
 def updateProduct(id):
@@ -99,7 +99,7 @@ def updateProduct(id):
             #Volta para página principal
             return redirect(url_for("showProducts"))
     else:
-        return render_template("products/updateProduct.html", product=dbc.upSelect("produtos", id))
+        return render_template("products/updateProduct.html", product=dbc.upSelect("produtos", id), status=dbc.select("status_produtos"))
     return render_template("products/updateProduct.html")
 
 @app.route("/deleteProduct/<int:id>", methods=['GET', 'POST'])
@@ -167,6 +167,10 @@ def userBuys(id):
 def productListPerTag(id):
     success_json = ujson.dumps(dbc.productListPerTag(id))
     return success_json
+
+@app.route("/selectURL/<table>")
+def selectURL(table):
+    return dbc.selectURL(table)
 
 #-----</Rotas RESTful>-----
 
