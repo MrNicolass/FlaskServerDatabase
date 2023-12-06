@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Category</title>
+</head>
+<body>
+    <div>
+        <a href="/">
+            <h1>Home</h1>
+        </a>
+    </div>
+    {%- for category, message in get_flashed_messages(with_categories = true) %}
+        <div class = "alert alert-danger">
+            {{ message }}
+        </div>
+    {%- endfor %}
+    <div>
+        <form action="{{ request.path }}" method="post">
+            <label for="nome">Descrição</label><br>
+            <input type="text" name="nome" placeholder="Nome da Categoria"/><br>
+            <label for="cod_pai">Categoria Pai</label><br>
+            <select name="cod_pai">
+                {% for cate in category %}
+                    <option name="cod_pai" value="{{ cate[0] }}">{{ cate[1] }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Cadastrar"/>
+        </form>
+    </div>
+</body>
+</html>

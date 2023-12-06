@@ -1,0 +1,1 @@
+delete from categorias where id = 3

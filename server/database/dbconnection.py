@@ -13,10 +13,10 @@ def connection():
     return cnx
 
 def insert(table, *args):
-    #Abre a conexão com o banco de dados
-    cnx = connection()
-
     if(table == "usuarios"):
+        #Abre a conexão com o banco de dados
+        cnx = connection()
+
         #Tenta realizar operação de inserção de um novo usuário
         try:
             #Define uma variável para facilicar a utilização do cursor de banco de dados
@@ -38,6 +38,56 @@ def insert(table, *args):
             if connection().is_connected():
                 cnx.close()
 
+    elif(table == "produtos"):
+        #Abre a conexão com o banco de dados
+        cnx = connection()
+
+        #Tenta realizar operação de inserção de um novo usuário
+        try:
+            #Define uma variável para facilicar a utilização do cursor de banco de dados
+            with cnx.cursor() as cursor:
+                insert = f"INSERT INTO {table} (cod_barras, descricao, id_status_produto, preco_normal, preco_com_desconto, quantidade) VALUES (%s, %s, %s, %s, %s, %s)"
+                values = args
+                cursor.execute(insert, values)
+
+                #Realiza operação de gravar os dados na tabela
+                cnx.commit()
+                flash("Produto cadastrado com sucesso!", "Sucesso")
+
+        #Caso não consiga inserir no banco, pega e exibe mensagem de erro que o banco retornar
+        except mysql.connector.Error as error:
+            flash(f"Falha ao inserir dados! Erro: {error}", "Erro")
+
+        #Após a função ser executada, encerra a conexão com o banco
+        finally:
+            if connection().is_connected():
+                cnx.close()
+
+    elif(table == "categorias"):
+        #Abre a conexão com o banco de dados
+        cnx = connection()
+
+        #Tenta realizar operação de inserção de uma nova categoria
+        try:
+            #Define uma variável para facilicar a utilização do cursor de banco de dados
+            with cnx.cursor() as cursor:
+                insert = f"INSERT INTO {table} (nome, id_categoria_pai) VALUES (%s, %s)"
+                values = args
+                cursor.execute(insert, values)
+
+                #Realiza operação de gravar os dados na tabela
+                cnx.commit()
+                flash("Categoria cadastrado com sucesso!", "Sucesso")
+
+        #Caso não consiga inserir no banco, pega e exibe mensagem de erro que o banco retornar
+        except mysql.connector.Error as error:
+            flash(f"Falha ao inserir dados! Erro: {error}", "Erro")
+
+        #Após a função ser executada, encerra a conexão com o banco
+        finally:
+            if connection().is_connected():
+                cnx.close()
+
 def delete(table, id):
     if table == "usuarios":
         cnx = connection()
@@ -45,7 +95,7 @@ def delete(table, id):
         try:
             #Define uma variável para facilicar a utilização do cursor de banco de dados
             with cnx.cursor() as cursor:
-                deleteQ = f"delete from usuarios where id = {id}"
+                deleteQ = f"delete from {table} where id = {id}"
                 cursor.execute(deleteQ)
 
                 #Realiza operação de gravar os dados na tabela
@@ -54,30 +104,113 @@ def delete(table, id):
 
         #Caso não consiga deletar no banco, pega e exibe mensagem de erro que o banco retornar
         except mysql.connector.Error as error:
-            return f"Falha ao inserir dados! Erro: {error}"
+            return f"Falha ao excluir dados! Erro: {error}"
 
         #Após a função ser executada, encerra a conexão com o banco
         finally:
             if connection().is_connected():
-                cnx.close()            
+                cnx.close()
 
-def select():
-    cnx = connection()
+    elif table == "produtos":
+        cnx = connection()
 
-    try:
-        with cnx.cursor() as cursor:
-            cursor.execute("select * from usuarios")
-            result = cursor.fetchall()
-        
-            return result
+        try:
+            #Define uma variável para facilicar a utilização do cursor de banco de dados
+            with cnx.cursor() as cursor:
+                deleteQ = f"delete from {table} where id = {id}"
+                cursor.execute(deleteQ)
 
-    except mysql.connector.Error as error:
-        flash(f"Falha ao consultar dados! Erro: {error}", "Erro")
+                #Realiza operação de gravar os dados na tabela
+                cnx.commit()
+                return f"Produto ID {id} deletado!"
 
-    #Após a função ser executada, encerra a conexão com o banco
-    finally:
-        if connection().is_connected():
-            cnx.close()
+        #Caso não consiga deletar no banco, pega e exibe mensagem de erro que o banco retornar
+        except mysql.connector.Error as error:
+            return f"Falha ao excluir dados! Erro: {error}"
+
+        #Após a função ser executada, encerra a conexão com o banco
+        finally:
+            if connection().is_connected():
+                cnx.close()
+
+    elif table == "categorias":
+        cnx = connection()
+
+        try:
+            #Define uma variável para facilicar a utilização do cursor de banco de dados
+            with cnx.cursor() as cursor:
+                updateCodPai = f"UPDATE {table} SET id_categoria_pai = NULL WHERE id = {id}"
+                cursor.execute(updateCodPai)
+                deleteQ = f"delete from {table} where id = {id}"
+                cursor.execute(deleteQ)
+
+                #Realiza operação de gravar os dados na tabela
+                cnx.commit()
+                return f"Categoria ID {id} deletada!"
+
+        #Caso não consiga deletar no banco, pega e exibe mensagem de erro que o banco retornar
+        except mysql.connector.Error as error:
+            return f"Falha ao excluir dados! Erro: {error}"
+
+        #Após a função ser executada, encerra a conexão com o banco
+        finally:
+            if connection().is_connected():
+                cnx.close()          
+
+def select(table):
+    if(table == "usuarios"):
+        cnx = connection()
+
+        try:
+            with cnx.cursor() as cursor:
+                cursor.execute("select * from usuarios")
+                result = cursor.fetchall()
+            
+                return result
+
+        except mysql.connector.Error as error:
+            flash(f"Falha ao consultar dados! Erro: {error}", "Erro")
+
+        #Após a função ser executada, encerra a conexão com o banco
+        finally:
+            if connection().is_connected():
+                cnx.close()
+
+    elif(table == "produtos"):
+        cnx = connection()
+
+        try:
+            with cnx.cursor() as cursor:
+                cursor.execute("select * from produtos")
+                result = cursor.fetchall()
+            
+                return result
+
+        except mysql.connector.Error as error:
+            flash(f"Falha ao consultar dados! Erro: {error}", "Erro")
+
+        #Após a função ser executada, encerra a conexão com o banco
+        finally:
+            if connection().is_connected():
+                cnx.close()
+
+    elif(table == "categorias"):
+        cnx = connection()
+
+        try:
+            with cnx.cursor() as cursor:
+                cursor.execute("select * from categorias")
+                result = cursor.fetchall()
+            
+                return result
+
+        except mysql.connector.Error as error:
+            flash(f"Falha ao consultar dados! Erro: {error}", "Erro")
+
+        #Após a função ser executada, encerra a conexão com o banco
+        finally:
+            if connection().is_connected():
+                cnx.close()
 
 def update(table, id, *args):   
     if table == "usuarios":
@@ -85,7 +218,7 @@ def update(table, id, *args):
 
         try:
             with cnx.cursor() as cursor:
-                updateQ = f"UPDATE usuarios SET email = %s, nome = %s, sobrenome = %s, ativo = %s WHERE id = {id}"
+                updateQ = f"UPDATE {table} SET email = %s, nome = %s, sobrenome = %s, ativo = %s WHERE id = {id}"
                 values = args
                 cursor.execute(updateQ, values)
 
@@ -100,22 +233,103 @@ def update(table, id, *args):
         #Após a função ser executada, encerra a conexão com o banco
         finally:
             if connection().is_connected():
-                cnx.close()  
+                cnx.close()
 
-def upSelect(id):
-    cnx = connection()
+    elif table == "produtos":
+        cnx = connection()
 
-    try:
-        with cnx.cursor() as cursor:
-            cursor.execute(f"select * from usuarios where id={id}")
-            result = cursor.fetchall()
-        
-            return result
+        try:
+            with cnx.cursor() as cursor:
+                updateQ = f"UPDATE {table} SET cod_barras = %s, descricao = %s, id_status_produto = %s, preco_normal = %s, preco_com_desconto = %s, quantidade = %s WHERE id = {id}"
+                values = args
+                cursor.execute(updateQ, values)
 
-    except mysql.connector.Error as error:
-        flash(f"Falha ao consultar dados! Erro: {error}", "Erro")
+                #Realiza operação de gravar os dados alterados na tabela
+                cnx.commit()
+                #Retorna a mensagem de operação bem sucedida
+                return "Produto alterado com sucesso!"
 
-    #Após a função ser executada, encerra a conexão com o banco
-    finally:
-        if connection().is_connected():
-            cnx.close()
+        except mysql.connector.Error as error:
+            return f"Falha ao alterar dados! Erro: {error}"
+
+        #Após a função ser executada, encerra a conexão com o banco
+        finally:
+            if connection().is_connected():
+                cnx.close() 
+
+    elif table == "categorias":
+        cnx = connection()
+
+        try:
+            with cnx.cursor() as cursor:
+                updateQ = f"UPDATE {table} SET nome = %s, id_categoria_pai = %sWHERE id = {id}"
+                values = args
+                cursor.execute(updateQ, values)
+
+                #Realiza operação de gravar os dados alterados na tabela
+                cnx.commit()
+                #Retorna a mensagem de operação bem sucedida
+                return "Categoria alterado com sucesso!"
+
+        except mysql.connector.Error as error:
+            return f"Falha ao alterar dados! Erro: {error}"
+
+        #Após a função ser executada, encerra a conexão com o banco
+        finally:
+            if connection().is_connected():
+                cnx.close() 
+
+def upSelect(table, id):
+    if(table == "usuarios"):
+        cnx = connection()
+
+        try:
+            with cnx.cursor() as cursor:
+                cursor.execute(f"select * from {table} where id={id}")
+                result = cursor.fetchall()
+            
+                return result
+
+        except mysql.connector.Error as error:
+            flash(f"Falha ao consultar dados! Erro: {error}", "Erro")
+
+        #Após a função ser executada, encerra a conexão com o banco
+        finally:
+            if connection().is_connected():
+                cnx.close()
+    
+    elif(table == "produtos"):
+        cnx = connection()
+
+        try:
+            with cnx.cursor() as cursor:
+                cursor.execute(f"select * from {table} where id={id}")
+                result = cursor.fetchall()
+            
+                return result
+
+        except mysql.connector.Error as error:
+            flash(f"Falha ao consultar dados! Erro: {error}", "Erro")
+
+        #Após a função ser executada, encerra a conexão com o banco
+        finally:
+            if connection().is_connected():
+                cnx.close()
+
+    elif(table == "categorias"):
+        cnx = connection()
+
+        try:
+            with cnx.cursor() as cursor:
+                cursor.execute(f"select * from {table} where id={id}")
+                result = cursor.fetchall()
+            
+                return result
+
+        except mysql.connector.Error as error:
+            flash(f"Falha ao consultar dados! Erro: {error}", "Erro")
+
+        #Após a função ser executada, encerra a conexão com o banco
+        finally:
+            if connection().is_connected():
+                cnx.close()

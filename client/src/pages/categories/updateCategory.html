@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Category</title>
+</head>
+<body>
+    <div>
+        <a href="/">
+            <h1>Home</h1>
+        </a>
+    </div>
+    <div>
+        {% for data in category %}
+            <form action="/updateCategory/{{ data[0] }}" method="post">
+                <label for="nome">Descrição</label><br>
+                <input type="text" name="nome" placeholder="Nome da Categoria" value="{{ data[1] }}"/><br>
+                <label for="cod_pai">Categoria Pai</label><br>
+                <select name="cod_pai">
+                    {% for cat in categ %}
+                        <option name="cod_pai" value="{{ cat[0] }}" selected="{{ cat[1] }}">{{ cat[1] }}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit" value="Alterar"/>
+            </form>
+        {% endfor %}
+    </div>
+</body>
+</html>

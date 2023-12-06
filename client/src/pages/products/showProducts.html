@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-bt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+</head>
+<body>
+    <div>
+        <ul>
+            <a href="/">
+                <li>Home</li>
+            </a>
+            <a href="{{ url_for('newProduct') }}">
+                <li>New Product</li>
+            </a>
+        </ul>
+    </div>
+    {%- for category, message in get_flashed_messages(with_categories = true) %}
+        <div class = "alert alert-danger">
+            {{ message }}
+        </div>
+    {%- endfor %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Código de Barras</th>
+                <th>Descrição</th>
+                <th>Situação</th>
+                <th>Preço</th>
+                <th>Preço c/ Desconto</th>
+                <th>Quantidade</th>
+            </tr>
+        </thead>
+        <tbody>
+           {% for prod in products %}
+            <tr>
+                <td>{{ prod[0] }}</td>
+                <td>{{ prod[1] }}</td>
+                <td>{{ prod[2] }}</td>
+                <td>{{ prod[3] }}</td>
+                <td>{{ prod[4] }}</td>
+                <td>{{ prod[5] }}</td>
+                <td>{{ prod[6] }}</td>
+                <td>
+                    <a href="/updateProduct/{{prod[0]}}">Editar</a>
+                    <a href="/deleteProduct/{{prod[0]}}">Deletar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Product</title>
+</head>
+<body>
+    <div>
+        <a href="/">
+            <h1>Home</h1>
+        </a>
+    </div>
+    <div>
+        {% for data in product %}
+            <form action="/updateProduct/{{ data[0] }}" method="post">
+                <label for="cod_barras">Código de Barras</label><br>
+                <input type="text" name="cod_barras" placeholder="Código de Barras" value="{{ data[1] }}"/><br>
+                <label for="descricao">Descrição</label><br>
+                <input type="text" name="descricao" placeholder="Descrição" value="{{ data[2] }}"/><br>
+                <label for="status">Situação</label><br>
+                <input type="number" name="status" placeholder="Situação" value="{{ data[3] }}"/><br>
+                <label for="preco">Preço</label><br>
+                <input type="number" name="preco" placeholder="Preço" value="{{ data[4] }}"/><br>
+                <label for="precoD">Preço com Desconto</label><br>
+                <input type="number" name="precoD" placeholder="Preçõo c/ Desconto" value="{{ data[5] }}"/><br>
+                <label for="quantidade">Quantidade</label><br>
+                <input type="number" name="quantidade" placeholder="Quantidade" value="{{ data[6] }}"/><br>
+                <input type="submit" value="Alterar"/>
+            </form>
+        {% endfor %}
+    </div>
+</body>
+</html>

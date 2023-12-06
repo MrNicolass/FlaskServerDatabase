@@ -12,10 +12,12 @@ app.config["SECRET_KEY"] = "random string"
 def index():
     return render_template("index.html")
 
+#-----<Rotas Usuário>-----
+
 @app.route("/showUsers")
 def showUsers():
     if request.method == "GET":
-        return render_template("users/showUsers.html", users=dbc.select())
+        return render_template("users/showUsers.html", users=dbc.select("usuario"))
     else:
         return render_template("users/showUsers.html")
 
@@ -46,7 +48,7 @@ def updateUser(id):
             #Volta para página principal
             return redirect(url_for("showUsers"))
     else:
-        return render_template("users/updateUsers.html", user=dbc.upSelect(id))
+        return render_template("users/updateUsers.html", user=dbc.upSelect("usuarios", id))
     return render_template("users/updateUsers.html")
 
 @app.route("/deleteUser/<int:id>", methods=["GET", "POST"])
@@ -54,13 +56,99 @@ def deleteUser(id):
     dbc.delete("usuarios", id)
     return redirect(url_for("showUsers"))
 
-@app.route("/products")
-def products():
-    return render_template("products.html")
+#-----</Rotas Usuário>-----
 
-@app.route("/categories")
-def categories():
-    return render_template("categories.html")
+#-----<Rotas Produtos>-----
+
+@app.route("/showProducts")
+def showProducts():
+    if request.method == "GET":
+        return render_template("products/showProducts.html", products=dbc.select("produtos"))
+    else:
+        return render_template("products/showProducts.html")
+    
+@app.route("/newProduct", methods=['GET', 'POST'])
+def newProduct():
+    if request.method == 'POST':
+        if not request.form['cod_barras'] or not request.form['descricao'] or not request.form['status'] or not request.form['preco'] or not request.form['precoD'] or not request.form['quantidade']:
+            flash("Preencha todos os campos!", "Erro")
+        else:
+            cod_barras = request.form['cod_barras']
+            descricao = request.form['descricao']
+            status = int(request.form['status'])
+            preco = float(request.form['preco'])
+            precoD = float(request.form['precoD'])
+            quantidade = int(request.form['quantidade'])
+            dbc.insert("produtos", cod_barras, descricao, status, preco, precoD, quantidade)
+    return render_template("products/newProduct.html")
+
+@app.route("/updateProduct/<int:id>", methods=['GET', 'POST'])
+def updateProduct(id):
+    if request.method == 'POST':
+        if not request.form['cod_barras'] or not request.form['descricao'] or not request.form['status'] or not request.form['preco'] or not request.form['precoD'] or not request.form['quantidade']:
+            flash("Preencha todos os campos!", "Erro")
+        else:
+            cod_barras = request.form['cod_barras']
+            descricao = request.form['descricao']
+            status = int(request.form['status'])
+            preco = float(request.form['preco'])
+            precoD = float(request.form['precoD'])
+            quantidade = int(request.form['quantidade'])
+            flash(dbc.update("produtos", id, cod_barras, descricao, status, preco, precoD, quantidade))
+            #Volta para página principal
+            return redirect(url_for("showProducts"))
+    else:
+        return render_template("products/updateProduct.html", product=dbc.upSelect("produtos", id))
+    return render_template("products/updateProduct.html")
+
+@app.route("/deleteProduct/<int:id>", methods=['GET', 'POST'])
+def deleteProduct(id):
+    dbc.delete("produtos", id)
+    return redirect(url_for("showProducts"))
+
+#-----</Rotas Produtos>-----
+
+#-----<Rotas Categorias>-----
+
+@app.route("/showCategories")
+def showCategories():
+    if request.method == "GET":
+        return render_template("categories/showCategories.html", category=dbc.select("categorias"))
+    else:
+        return render_template("categories/showCategories.html")
+
+@app.route("/newCategory", methods=['GET', 'POST'])
+def newCategory():
+    if request.method == 'POST':
+        if not request.form['nome'] or not request.form['cod_pai']:
+            flash("Preencha todos os campos!", "Erro")
+        else:
+            nome = request.form['nome']
+            cod_pai = request.form['cod_pai']
+            dbc.insert("categorias", nome, cod_pai)
+    return render_template("categories/newCategory.html", category=dbc.select("categorias"))
+
+@app.route("/updateCategory/<int:id>", methods=['GET', 'POST'])
+def updateCategory(id):
+    if request.method == 'POST':
+        if not request.form['nome'] or not request.form['cod_pai']:
+            flash("Preencha todos os campos!", "Erro")
+        else:
+            nome = request.form['nome']
+            cod_pai = request.form['cod_pai']
+            flash(dbc.update("categorias", id, nome, cod_pai))
+            #Volta para página principal
+            return redirect(url_for("showCategories"))
+    else:
+        return render_template("categories/updateCategory.html", category=dbc.upSelect("categorias", id), categ=dbc.select("categorias"))
+    return render_template("categories/updateCategory.html")
+
+@app.route("/deleteCategory/<int:id>", methods=['GET', 'POST'])
+def deleteCategory(id):
+    dbc.delete("categorias", id)
+    return redirect(url_for("showCategories"))
+
+#-----</Rotas Categorias>-----
 
 if __name__ == "__main__":
     #Cria o contexto da aplicação

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-bt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories</title>
+</head>
+<body>
+    <div>
+        <ul>
+            <a href="/">
+                <li>Home</li>
+            </a>
+            <a href="{{ url_for('newCategory') }}">
+                <li>New Category</li>
+            </a>
+        </ul>
+    </div>
+    {%- for category, message in get_flashed_messages(with_categories = true) %}
+        <div class = "alert alert-danger">
+            {{ message }}
+        </div>
+    {%- endfor %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Descrição</th>
+                <th>Categoria Pai</th>
+            </tr>
+        </thead>
+        <tbody>
+           {% for cate in category %}
+            <tr>
+                <td>{{ cate[0] }}</td>
+                <td>{{ cate[1] }}</td>
+                <td>{{ cate[2] }}</td>
+                <td>
+                    <a href="/updateCategory/{{cate[0]}}">Editar</a>
+                    <a href="/deleteCategory/{{cate[0]}}">Deletar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
