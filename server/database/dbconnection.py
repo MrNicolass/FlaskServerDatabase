@@ -333,3 +333,60 @@ def upSelect(table, id):
         finally:
             if connection().is_connected():
                 cnx.close()
+
+def productListTag():
+    cnx = connection()
+
+    try:
+        with cnx.cursor() as cursor:
+           # cursor.execute(f"SELECT p.cod_barras, p.descricao AS 'Produto', t.nome AS 'Tag', p.preco_normal AS 'Preco' FROM produtos AS p LEFT JOIN produtos_tags AS pt ON p.id = pt.id_produto LEFT JOIN tags AS t ON pt.id_tag = t.id")
+            cursor.execute(f"SELECT * from view_produtos_com_tag")
+            result = cursor.fetchall()
+        
+            return result
+
+    except mysql.connector.Error as error:
+        flash(f"Falha ao consultar dados! Erro: {error}", "Erro")
+
+    #Após a função ser executada, encerra a conexão com o banco
+    finally:
+        if connection().is_connected():
+            cnx.close()
+
+def userBuys(id):
+    cnx = connection()
+
+    try:
+        with cnx.cursor() as cursor:
+           # cursor.execute(f"SELECT p.cod_barras, p.descricao AS 'Produto', t.nome AS 'Tag', p.preco_normal AS 'Preco' FROM produtos AS p LEFT JOIN produtos_tags AS pt ON p.id = pt.id_produto LEFT JOIN tags AS t ON pt.id_tag = t.id")
+            cursor.execute(f"SELECT * from view_compras_do_usuario where id_usuario = {id}")
+            result = cursor.fetchall()
+        
+            return result
+
+    except mysql.connector.Error as error:
+        flash(f"Falha ao consultar dados! Erro: {error}", "Erro")
+
+    #Após a função ser executada, encerra a conexão com o banco
+    finally:
+        if connection().is_connected():
+            cnx.close()
+
+def productListPerTag(id):
+    cnx = connection()
+
+    try:
+        with cnx.cursor() as cursor:
+           # cursor.execute(f"SELECT p.cod_barras, p.descricao AS 'Produto', t.nome AS 'Tag', p.preco_normal AS 'Preco' FROM produtos AS p LEFT JOIN produtos_tags AS pt ON p.id = pt.id_produto LEFT JOIN tags AS t ON pt.id_tag = t.id")
+            cursor.execute(f"SELECT * from view_produtos_com_tag where idTag = {id}")
+            result = cursor.fetchall()
+        
+            return result
+
+    except mysql.connector.Error as error:
+        flash(f"Falha ao consultar dados! Erro: {error}", "Erro")
+
+    #Após a função ser executada, encerra a conexão com o banco
+    finally:
+        if connection().is_connected():
+            cnx.close() 

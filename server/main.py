@@ -1,5 +1,6 @@
 from flask import Flask, flash, redirect, render_template, request, url_for
 import database.dbconnection as dbc
+import ujson #Biblioteca "estilziada" para trabalhar com dados em JSON
 import os
 
 #Variável para salvar caminho padrão dos arquivos principáis
@@ -17,7 +18,7 @@ def index():
 @app.route("/showUsers")
 def showUsers():
     if request.method == "GET":
-        return render_template("users/showUsers.html", users=dbc.select("usuario"))
+        return render_template("users/showUsers.html", users=dbc.select("usuarios"))
     else:
         return render_template("users/showUsers.html")
 
@@ -149,6 +150,25 @@ def deleteCategory(id):
     return redirect(url_for("showCategories"))
 
 #-----</Rotas Categorias>-----
+
+#-----<Rotas RESTful>-----
+
+@app.route("/productListTag")
+def productListTag():
+    success_json = ujson.dumps(dbc.productListTag())
+    return success_json
+
+@app.route("/userBuys/<int:id>")
+def userBuys(id):
+    success_json = ujson.dumps(dbc.userBuys(id))
+    return success_json
+
+@app.route("/productListPerTag/<int:id>")
+def productListPerTag(id):
+    success_json = ujson.dumps(dbc.productListPerTag(id))
+    return success_json
+
+#-----</Rotas RESTful>-----
 
 if __name__ == "__main__":
     #Cria o contexto da aplicação
