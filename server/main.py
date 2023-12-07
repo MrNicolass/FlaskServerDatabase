@@ -72,7 +72,7 @@ def updateUser(id):
 @app.route("/deleteUser/<int:id>", methods=["GET", "POST"])
 def deleteUser(id):
     #Realiza função de delete, passando em qual tabela realizar operação e o ID do usuário a ser deletado
-    dbc.delete("usuarios", id)
+    flash(dbc.delete("usuarios", id))
     #Recarrega página
     return redirect(url_for("showUsers"))
 
@@ -126,7 +126,7 @@ def updateProduct(id):
 
 @app.route("/deleteProduct/<int:id>", methods=['GET', 'POST'])
 def deleteProduct(id):
-    dbc.delete("produtos", id)
+    flash(dbc.delete("produtos", id))
     return redirect(url_for("showProducts"))
 
 #-----</Rotas Produtos>-----
@@ -168,7 +168,7 @@ def updateCategory(id):
 
 @app.route("/deleteCategory/<int:id>", methods=['GET', 'POST'])
 def deleteCategory(id):
-    dbc.delete("categorias", id)
+    flash(dbc.delete("categorias", id))
     return redirect(url_for("showCategories"))
 
 #-----</Rotas Categorias>-----
