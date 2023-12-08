@@ -180,7 +180,7 @@ def deleteCategory(id):
 def productListTag():
     #Chama a função que apresenta os valores do resultado do select da view e logo após transforma os resultados
     #da lista em JSON
-    success_json = ujson.dumps(dbc.productListTag())
+    success_json = ujson.dumps(dbc.productListTag(), default = str)
     #Retorna para a rota e carrega o resultado em JSON
     return success_json
 
@@ -189,7 +189,7 @@ def productListTag():
 def userBuys(id):
     #Chama a função que apresenta os valores do resultado do select da view e logo após transforma os resultados
     #da lista em JSON
-    success_json = ujson.dumps(dbc.userBuys(id))
+    success_json = ujson.dumps(dbc.userBuys(id), default = str)
     #Retorna para a rota e carrega o resultado em JSON
     return success_json
 
@@ -198,7 +198,7 @@ def userBuys(id):
 def productListPerTag(id):
     #Chama a função que apresenta os valores do resultado do select da view e logo após transforma os resultados
     #da lista em JSON
-    success_json = ujson.dumps(dbc.productListPerTag(id))
+    success_json = ujson.dumps(dbc.productListPerTag(id), default = str)
     #Retorna para a rota e carrega o resultado em JSON
     return success_json
 
